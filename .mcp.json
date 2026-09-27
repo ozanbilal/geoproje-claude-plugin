@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "geoproje": {
+      "type": "http",
+      "url": "https://mcp.geoproje.com.tr/mcp"
+    }
+  }
+}

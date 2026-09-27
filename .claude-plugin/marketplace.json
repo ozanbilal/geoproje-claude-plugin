@@ -1,0 +1,15 @@
+{
+  "name": "geoproje",
+  "description": "Geoproje eklentileri",
+  "owner": {
+    "name": "Geoproje",
+    "url": "https://app.geoproje.com.tr/"
+  },
+  "plugins": [
+    {
+      "name": "geoproje",
+      "source": "./",
+      "description": "Geoteknik ve deprem mühendisliği için Geoproje bağlayıcısı ve yönlendirici skill."
+    }
+  ]
+}
