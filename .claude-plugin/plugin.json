@@ -2,7 +2,7 @@
   "name": "geoproje",
   "displayName": "Geoproje",
   "version": "0.1.0",
-  "description": "Geoteknik ve deprem mühendisliği için Geoproje araçlarını Claude'a bağlar: zemin etüdü profilleri, TBDY 2018 tehlike spektrumu, SelectEQ kayıt seçimi, GMPS, GeoWave, OmniPile, Hoek-Brown ve PMM hesapları. Uzman skill içeriği Geoproje hesabınızın yetkisine göre sunulur.",
+  "description": "Geoteknik ve deprem mühendisliği için Geoproje araçlarını Claude'a bağlar: zemin etüdü profilleri, TBDY 2018 tehlike spektrumu, SelectEQ kayıt seçimi, GMPS, GeoWave, OmniPile, Hoek-Brown ve PMM hesapları. Ücretli bir Geoproje planı gerekir.",
   "author": {
     "name": "Geoproje",
     "url": "https://app.geoproje.com.tr/"

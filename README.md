@@ -13,10 +13,8 @@ Bu eklenti Geoproje mühendislik araçlarını Claude'a bağlar. İki parçadan 
   hazırlar, TBDY 2018 tehlike spektrumunu verir ve SelectEQ, GMPS, GeoWave, OmniPile,
   Hoek-Brown ve PMM hesap uçlarını çağırır.
 - **Yönlendirici skill** (`geoproje-engineering-assistant`): Claude'a hangi iş için
-  hangi Geoproje aracının ve hangi uzman skill paketinin kullanılacağını söyler.
-  Uzman içerik (rapor şablonları, yönetmelik kural paketleri, analiz talimatları)
-  bu depoda yoktur; Geoproje sunucusunda durur ve hesabınızın yetkisine göre
-  bağlayıcıdan okunur.
+  hangi Geoproje aracının kullanılacağını söyler. Claude'un izlediği talimatların
+  tamamı bu depodaki skill dosyasındadır; eklenti sunucudan talimat indirmez.
 
 ### Kimin için
 
@@ -31,7 +29,7 @@ kazık taşıma gücü, geoteknik rapor hazırlama ve inceleme.
   bağlayıcısını bağlayın ve Geoproje hesabınızla giriş yapın.
 - **Claude Code:** `/plugin` menüsünden eklentiyi kurun. Dizinde listelenene kadar
   depo bir marketplace olarak da eklenebilir:
-  `/plugin marketplace add <sahip>/<depo>` ve `/plugin install geoproje@geoproje`.
+  `/plugin marketplace add ozanbilal/geoproje-claude-plugin` ve `/plugin install geoproje@geoproje`.
   Bağlantı durumunu `/mcp` ile görün.
 
 ### Geoproje hesabı
@@ -47,8 +45,8 @@ kazık taşıma gücü, geoteknik rapor hazırlama ve inceleme.
 - Bazı işlemler kredi harcar: ücretli hesap uçları (`arac_kos`), etüt çıkarımı ve
   Geoproje asistanına soru (`asistana_sor`). Claude kredi harcayan bir adımdan önce
   onayınızı ister. Güncel fiyatlar ve planlar: https://app.geoproje.com.tr/planlar
-- Uzman skill paketleri hesabınızdaki modüllere göre açılır. Yetkiniz olmayan bir
-  paket istendiğinde Claude hangi aboneliğe dahil olduğunu söyler.
+- Plan ve modül kontrolü Geoproje sunucusunda yapılır. Planınızda olmayan bir araç
+  çağrılırsa bağlayıcı kısa bir hata ve plan sayfası bağlantısı döner.
 
 ### Örnek istemler
 
@@ -60,8 +58,8 @@ kazık taşıma gücü, geoteknik rapor hazırlama ve inceleme.
    satırları listele, GeoWave proje dosyasını hazırla ve Proje Dosyalarıma kaydet."
 4. "Biten SelectEQ seçimimin kayıt listesini kaynak sayfaları ve atıf metinleriyle
    ver, GMPS proje dosyasını da hesabıma kaydet."
-5. "Ekteki geoteknik raporu Geoproje geoteknik rapor kontrol listesine göre incele
-   ve bulguları önem derecesiyle listele." (Uzman paket yetkinize bağlıdır.)
+5. "Proje Dosyalarımdaki son OmniPile dosyasını aç, kazık boyunu 2 m artırarak
+   taşıma gücünü yeniden hesapla ve iki sonucu karşılaştır."
 
 Etüt belgelerini (PDF, DWG, XLSX) app.geoproje.com.tr "Etütlerim" sayfasından
 yükleyin. Uzak bağlayıcı bilgisayarınızdaki dosya yollarını okuyamaz.
@@ -98,10 +96,8 @@ This plugin connects Geoproje engineering tools to Claude. It has two parts:
   module project files, returns the TBDY 2018 hazard spectrum for sites in Turkey, and
   calls the SelectEQ, GMPS, GeoWave, OmniPile, Hoek-Brown and PMM compute endpoints.
 - **Router skill** (`geoproje-engineering-assistant`): tells Claude which Geoproje tool
-  and which specialist skill package fits each task. Specialist content (report
-  templates, code rule packs, analysis instructions) is not in this repository. It
-  stays on the Geoproje server and the connector serves it according to your account
-  entitlements.
+  fits each task. All instructions Claude follows are in the skill file in this
+  repository; the plugin does not download instructions from a server.
 
 ### Who it is for
 
@@ -115,7 +111,7 @@ report writing and review.
   connect the Geoproje connector from the plugin's Connectors tab and sign in with your
   Geoproje account.
 - **Claude Code:** install it from `/plugin`. Before the directory listing, you can add
-  the repository as a marketplace: `/plugin marketplace add <owner>/<repo>` and
+  the repository as a marketplace: `/plugin marketplace add ozanbilal/geoproje-claude-plugin` and
   `/plugin install geoproje@geoproje`. Check the connection with `/mcp`.
 
 ### Geoproje account
@@ -129,8 +125,8 @@ report writing and review.
 - Some operations spend credits: paid compute endpoints (`arac_kos`), document extraction
   and assistant questions (`asistana_sor`). Claude asks for your confirmation first.
   Current prices and plans: https://app.geoproje.com.tr/planlar
-- Specialist skill packages open according to the modules on your account. If you ask for
-  a package you do not have, Claude tells you which subscription includes it.
+- Plan and module checks happen on the Geoproje server. If a tool is not in your plan, the
+  connector returns a short error with a link to the plans page.
 
 ### Example prompts
 
@@ -142,9 +138,8 @@ report writing and review.
    unconfirmed rows, prepare the GeoWave project file and save it to my project files."
 4. "List the records of my finished SelectEQ selection with source pages and citations,
    and save the GMPS project file to my account."
-5. "Review the attached geotechnical report against the Geoproje geotechnical report
-   checklist and list the findings by severity." (Depends on your specialist package
-   entitlement.)
+5. "Open my latest OmniPile project file, recompute the pile capacity with the pile 2 m
+   longer and compare the two results."
 
 Upload study documents (PDF, DWG, XLSX) on the Etütlerim page at app.geoproje.com.tr. The
 remote connector cannot read file paths on your computer.

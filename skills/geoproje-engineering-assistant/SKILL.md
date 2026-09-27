@@ -1,13 +1,13 @@
 ---
 name: geoproje-engineering-assistant
-description: "Geoteknik veya deprem mühendisliği işi (zemin etüdü, TBDY tehlike spektrumu, deprem kaydı seçimi, zemin davranışı analizi, kazık, geoteknik rapor, yönetmelik kontrolü) Geoproje araçlarıyla yapılacaksa kullan. İşi doğru Geoproje aracına ve uzman skill paketine yönlendirir, uzman içeriği kullanıcının yetkisine göre Geoproje bağlayıcısından okur."
+description: "Geoteknik veya deprem mühendisliği işi (zemin etüdü, TBDY tehlike spektrumu, deprem kaydı seçimi, zemin davranışı analizi, kazık, Hoek-Brown, PMM) Geoproje araçlarıyla yapılacaksa kullan. İşi doğru Geoproje hesap aracına yönlendirir ve sonucu kaynağıyla açıklatır."
 ---
 
 # Geoproje Mühendislik Asistanı (yönlendirici)
 
-Bu skill bir yönlendiricidir. Mühendislik yöntemi, yönetmelik kuralı, rapor şablonu
-veya stil kuralı içermez. Uzman içerik Geoproje sunucusunda durur ve kullanıcının
-Geoproje hesabındaki yetkiye göre Geoproje bağlayıcısından okunur.
+Bu skill bir yönlendiricidir: kullanıcının istediği mühendislik işini doğru Geoproje
+aracına bağlar. Hesabı Geoproje araçları yapar; bu skill yöntem, yönetmelik kuralı
+veya rapor şablonu içermez ve Claude'a başka bir kaynaktan talimat okutmaz.
 
 ## Rolün
 
@@ -31,53 +31,30 @@ Geoproje hesabındaki yetkiye göre Geoproje bağlayıcısından okunur.
    Bağlayıcı ücretli bir Geoproje planı ister; Free hesap bağlanamaz.
 2. Bağlıysa `hesap_bilgisi` ile sahip olunan modülleri ve kredi bakiyesini oku.
    Kredi harcayan bir adımdan önce bu bilgiyi kullanıcıya göster.
-3. Bağlayıcı "ücretli plan gerekir", 402, 403 veya 429 dönerse mesajı olduğu gibi
-   ilet ve abonelik sayfasını (app.geoproje.com.tr/abonelik) göster. Kısıtı aşmaya
-   çalışma, başka bir yoldan aynı sonucu üretmeye kalkma.
+3. Bağlayıcı plan, 402, 403 veya 429 hatası dönerse mesajı olduğu gibi ilet. Plan
+   ayrıntıları app.geoproje.com.tr/planlar sayfasındadır. Kısıtı aşmaya çalışma,
+   başka bir yoldan aynı sonucu üretmeye kalkma.
 
 ## İşi yönlendir
 
-| İş | Geoproje aracı | Uzman skill paketi |
-|---|---|---|
-| Zemin etüdü profilini okuma, modül proje dosyası hazırlama | `etut_listele`, `etut_getir`, `etut_dosyasi` | (gerekmez) |
-| TBDY 2018 harita katsayıları ve tasarım spektrumu | `tehlike_spektrumu` | (gerekmez) |
-| Deprem kaydı seçimi (SelectEQ) ve seçilen kayıtların listesi | `arac_kos` (selecteq), `secim_indirme_listesi`, `secim_gmps_dosyasi` | `selecteq-record-downloader` |
-| Kayıt işleme ve spektral benzeştirme (GMPS) | `arac_kos` (gmps) | `sozda-rapor-yazimi` |
-| Zemin davranışı analizi (GeoWave) | `etut_dosyasi` (geowave), `arac_kos` (geowave) | `geowave-site-response-analyst`, `soil-constitutive-model-calibration` |
-| SOZDA raporu yazma / inceleme | | `sozda-rapor-yazimi` / `sozda-rapor-kontrolu` |
-| Deprem tehlikesi analizi (DTA/PSHA) ve raporu | | `openquake-dta`, `seismic-hazard-report-writer`, `seismic-hazard-report-reviewer` |
-| Kazık taşıma gücü (OmniPile), Hoek-Brown, PMM | `arac_kos` (omnipile, hoek_brown, pmm) | (gerekmez) |
-| Türkçe geoteknik rapor yazma / inceleme | | `geotechnical-report-writer` / `geotech-report-reviewer` |
-| Yapı-zemin-kazık etkileşimi (YKZE) | | önce `ykze-ortak`, sonra yönteme göre diğer `ykze-*` paketleri |
-| Yönetmelik veya ürün sorusu | `asistana_sor` | |
+| İş | Geoproje aracı |
+|---|---|
+| Zemin etüdü profilini okuma, modül proje dosyası hazırlama | `etut_listele`, `etut_getir`, `etut_dosyasi` |
+| TBDY 2018 harita katsayıları ve tasarım spektrumu | `tehlike_spektrumu` |
+| Deprem kaydı seçimi (SelectEQ) ve seçilen kayıtların listesi | `arac_kos` (selecteq), `secim_indirme_listesi`, `secim_gmps_dosyasi` |
+| Kayıt işleme ve spektral benzeştirme (GMPS) | `arac_kos` (gmps) |
+| Zemin davranışı analizi (GeoWave) | `etut_dosyasi` (geowave), `arac_kos` (geowave) |
+| Kazık taşıma gücü (OmniPile), Hoek-Brown, PMM | `arac_kos` (omnipile, hoek_brown, pmm) |
+| Kayıtlı proje dosyaları | `proje_listele`, `proje_getir`, `proje_kaydet` |
+| Yönetmelik veya ürün sorusu | `asistana_sor` |
 
-Tabloda olmayan bir iş için uzman skill adı uydurma. Sunucudaki paket listesini
-okuyamıyorsan kullanıcıya bu alanın Geoproje eklentisinde henüz bulunmadığını söyle.
+Tabloda aracı olmayan işlerde (ör. rapor metni yazma) genel mühendislik bilgisiyle
+yardım edebilirsin; bunun bir Geoproje hesabı olmadığını açıkça belirt ve sayıları
+yine kaynağa bağla.
 
 DTA (tehlike) ile SOZDA (sahaya özel zemin davranışı) ayrı aşamalardır. Kayıt
 seçimi, ölçekleme ve spektral benzeştirme SOZDA tarafındadır; DTA sonucuna
 eklenmez. İki aşamayı içeren işte ikisinin kanıtını ve durumunu ayrı tut.
-
-## Uzman skill içeriğini al
-
-Uzman skill paketleri Geoproje bağlayıcısındaki skill okuma araçlarıyla okunur:
-
-1. `skill_indeksi` ile kullanıcının erişebildiği paketleri gör.
-2. `skill_dosyalari_listele` (paket adı) ile paketteki dosyaları listele.
-3. `skill_dosyasi_oku` (paket adı, `SKILL.md`) ile ana talimatı oku; talimat bir
-   referans dosyası istiyorsa onu da aynı araçla oku. Yalnız işe gereken dosyaları
-   oku.
-4. Okuduğun talimatı bu iş için uygula. İçeriği kullanıcıya toptan kopyalama; iş
-   için gereken kısmı kullan.
-
-Araç `not_available_remote` ya da yetki hatası dönerse:
-
-- Yanıtta `required_module` veya abonelik adı varsa kullanıcıya şunu söyle:
-  "Bu uzman içerik <abonelik> aboneliğine dahildir. Abonelik sayfası:
-  app.geoproje.com.tr/abonelik". İçeriği tahmin etme, benzerini yazma.
-- Skill okuma araçları bağlayıcıda hiç yoksa: "Uzman içerik bu bağlayıcı sürümünde
-  henüz sunulmuyor" de; genel mühendislik bilgisiyle yardım ettiğini ve bunun Geoproje
-  uzman talimatı olmadığını açıkça belirt.
 
 ## Araç kuralları
 
