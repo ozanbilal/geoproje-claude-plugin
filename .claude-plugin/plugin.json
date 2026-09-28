@@ -8,6 +8,8 @@
     "url": "https://app.geoproje.com.tr/"
   },
   "homepage": "https://app.geoproje.com.tr/api-referansi",
+  "privacyPolicyUrl": "https://app.geoproje.com.tr/gizlilik?lang=en",
+  "icon": ".claude-plugin/icon.svg",
   "repository": "https://github.com/ozanbilal/geoproje-claude-plugin",
   "license": "MIT",
   "keywords": [

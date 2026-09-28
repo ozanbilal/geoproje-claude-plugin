@@ -40,6 +40,7 @@ veya rapor şablonu içermez ve Claude'a başka bir kaynaktan talimat okutmaz.
 | İş | Geoproje aracı |
 |---|---|
 | Zemin etüdü profilini okuma, modül proje dosyası hazırlama | `etut_listele`, `etut_getir`, `etut_dosyasi` |
+| Yeni etüt raporundan profil çıkarma | `etut_yukleme_baglantisi`, `cikarim_tahmin`, `cikarim_baslat`, `cikarim_durum` |
 | TBDY 2018 harita katsayıları ve tasarım spektrumu | `tehlike_spektrumu` |
 | Deprem kaydı seçimi (SelectEQ) ve seçilen kayıtların listesi | `arac_kos` (selecteq), `secim_indirme_listesi`, `secim_gmps_dosyasi` |
 | Kayıt işleme ve spektral benzeştirme (GMPS) | `arac_kos` (gmps) |
@@ -58,17 +59,23 @@ eklenmez. İki aşamayı içeren işte ikisinin kanıtını ve durumunu ayrı tu
 
 ## Araç kuralları
 
-- Kredi harcayan araçlar: `arac_kos` (ücretli uçlarda) ve `asistana_sor`. Çağırmadan
-  önce ne yapılacağını ve maliyetin nereden okunduğunu söyle, kullanıcının açık
-  onayını al.
+- Kredi harcayan araçlar: `arac_kos` (ücretli uçlarda), `cikarim_baslat` ve
+  `asistana_sor`. Çağırmadan önce ne yapılacağını ve maliyetin nereden okunduğunu
+  söyle, kullanıcının açık onayını al.
 - `arac_kos` gövdesini tahmin etme. Önce ilgili modülün OpenAPI kaynağını
   (`geoproje://openapi/<modül>`) oku.
 - Uzak bağlayıcı kullanıcının bilgisayarındaki dosya yolunu okuyamaz ve diske
-  yazmaz. Etüt belgesi (PDF, DWG, XLSX) yüklemek için kullanıcıyı
-  app.geoproje.com.tr "Etütlerim" sayfasına yönlendir; profil hazır olunca
-  `etut_listele` ile devam et. `kaydet_yolu`, `klasor`, `yol` ve `dosya_yolu`
-  alanlarını verme; dosya içeriği yanıtta döner. Hesaba kaydetmek için
-  `proje_kaydet` aracına `icerik_base64` ver.
+  yazmaz. Etüt raporu (PDF, DWG, DXF, XLSX, DOCX, görsel) için:
+  1. `etut_yukleme_baglantisi` ile tek kullanımlık bağlantı al (her dosyaya bir
+     bağlantı). Kabuğu olan istemcide yanıttaki `curl` komutunu çalıştır; kabuk
+     yoksa kullanıcıya `yukleme_sayfasi` bağlantısını ver, dosyayı tarayıcıda seçsin.
+  2. `cikarim_tahmin(belge_idleri=[...])` ile kredi tutarını ve bakiyenin yetip
+     yetmediğini kullanıcıya göster. Yetmiyorsa yanıttaki kredi satın alma
+     bağlantısını ver ve dur.
+  3. Kullanıcı açıkça onaylarsa `cikarim_baslat(belge_idleri=[...], onay=true)`.
+  4. `cikarim_durum` ile izle; profil hazır olunca `etut_listele` ile devam et.
+  `kaydet_yolu`, `klasor`, `yol` ve `dosya_yolu` alanlarını verme; dosya içeriği
+  yanıtta döner. Hesaba kaydetmek için `proje_kaydet` aracına `icerik_base64` ver.
 - SelectEQ kayıt listesi ivme-zaman verisi taşımaz. Kayıtları kullanıcı kendi
   hesabıyla kaynak sitelerden indirir; lisans koşulları kaynak veri tabanına aittir.
 - Bir aracın başarılı çalışması mühendislik onayı değildir.
